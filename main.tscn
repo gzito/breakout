@@ -1,0 +1,174 @@
+[gd_scene load_steps=15 format=3 uid="uid://dpevibdy37i11"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_dsd84"]
+[ext_resource type="PackedScene" uid="uid://c7fdvs3036nlm" path="res://paddle.tscn" id="2_6620v"]
+[ext_resource type="Script" path="res://border.gd" id="2_ugbav"]
+[ext_resource type="PackedScene" uid="uid://dbomsbun7khtq" path="res://ball.tscn" id="3_htjch"]
+[ext_resource type="FontFile" uid="uid://ianmnd3imbh8" path="res://assets/pong-score.ttf" id="5_prd4x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w4c3l"]
+size = Vector2(8, 624)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a4u5b"]
+size = Vector2(8, 624)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gly80"]
+size = Vector2(516, 24)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_08hmg"]
+
+[sub_resource type="FontVariation" id="FontVariation_0uxxb"]
+base_font = ExtResource("5_prd4x")
+spacing_glyph = -16
+
+[sub_resource type="FontVariation" id="FontVariation_bv68b"]
+base_font = ExtResource("5_prd4x")
+spacing_glyph = -16
+
+[sub_resource type="Animation" id="Animation_nmw51"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScoreP1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_k8es2"]
+resource_name = "blink"
+length = 0.2
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ScoreP1:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2t6vo"]
+_data = {
+"RESET": SubResource("Animation_nmw51"),
+"blink": SubResource("Animation_k8es2")
+}
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_dsd84")
+
+[node name="LeftBorder" type="Area2D" parent="."]
+position = Vector2(318, 24)
+collision_mask = 2
+script = ExtResource("2_ugbav")
+location = 2
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="LeftBorder"]
+offset_right = 8.0
+offset_bottom = 624.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBorder"]
+position = Vector2(4, 312)
+shape = SubResource("RectangleShape2D_w4c3l")
+
+[node name="RightBorder" type="Area2D" parent="."]
+position = Vector2(826, 24)
+collision_mask = 2
+script = ExtResource("2_ugbav")
+location = 3
+metadata/_edit_group_ = true
+
+[node name="ColorRect2" type="ColorRect" parent="RightBorder"]
+offset_right = 8.0
+offset_bottom = 624.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBorder"]
+position = Vector2(4, 312)
+shape = SubResource("RectangleShape2D_a4u5b")
+
+[node name="TopBorder" type="Area2D" parent="."]
+position = Vector2(318, 0)
+collision_mask = 2
+script = ExtResource("2_ugbav")
+metadata/_edit_group_ = true
+
+[node name="ColorRect3" type="ColorRect" parent="TopBorder"]
+offset_right = 516.0
+offset_bottom = 24.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopBorder"]
+position = Vector2(258, 12)
+shape = SubResource("RectangleShape2D_gly80")
+
+[node name="Paddle" parent="." instance=ExtResource("2_6620v")]
+position = Vector2(560, 600)
+
+[node name="Ball" parent="." instance=ExtResource("3_htjch")]
+position = Vector2(572, 350)
+
+[node name="BottomBorder" type="Area2D" parent="."]
+collision_mask = 2
+script = ExtResource("2_ugbav")
+location = 1
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomBorder"]
+position = Vector2(431, 648)
+shape = SubResource("WorldBoundaryShape2D_08hmg")
+
+[node name="PlayerNum" type="Label" parent="."]
+offset_left = 340.0
+offset_top = 34.0
+offset_right = 380.0
+offset_bottom = 57.0
+theme_override_fonts/font = ExtResource("5_prd4x")
+theme_override_font_sizes/font_size = 50
+text = "1"
+
+[node name="BallNum" type="Label" parent="."]
+offset_left = 644.0
+offset_top = 34.0
+offset_right = 694.0
+offset_bottom = 84.0
+theme_override_fonts/font = ExtResource("5_prd4x")
+theme_override_font_sizes/font_size = 50
+text = "1"
+
+[node name="ScoreP1" type="Label" parent="."]
+offset_left = 372.0
+offset_top = 100.0
+offset_right = 522.0
+offset_bottom = 150.0
+theme_override_fonts/font = SubResource("FontVariation_0uxxb")
+theme_override_font_sizes/font_size = 50
+text = "000"
+
+[node name="ScoreP2" type="Label" parent="."]
+offset_left = 675.0
+offset_top = 100.0
+offset_right = 825.0
+offset_bottom = 150.0
+theme_override_fonts/font = SubResource("FontVariation_bv68b")
+theme_override_font_sizes/font_size = 50
+text = "000"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2t6vo")
+}
+autoplay = "blink"
+
+[connection signal="area_entered" from="LeftBorder" to="LeftBorder" method="_on_area_entered"]
+[connection signal="area_entered" from="RightBorder" to="RightBorder" method="_on_area_entered"]
+[connection signal="area_entered" from="TopBorder" to="TopBorder" method="_on_area_entered"]
+[connection signal="area_entered" from="BottomBorder" to="BottomBorder" method="_on_area_entered"]
